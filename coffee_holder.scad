@@ -93,7 +93,7 @@ module ramp(width, depth, height, thickness, radius) {
 
     translate([height*1.75, 0, height*2])
       rotate([-90, 0, 0])
-      cylinder(h = width + thickness*2, r = height*2, $fn = 100);
+      cylinder(h = width + thickness*3, r = height*2, $fn = 100);
   }
 }
 
