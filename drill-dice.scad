@@ -14,7 +14,7 @@ module die(size = 25, radius = 3, face_text) {
     }
 
     translate([0, 0, size+1])
-      rotate([0, 0, 45])
+      rotate([0, 0, -45])
       linear_extrude(3)
       text(face_text[0], font="Roboto Condensed:style=Bold", size=4.5, halign="center", valign="center");
 
@@ -24,7 +24,7 @@ module die(size = 25, radius = 3, face_text) {
       text(face_text[1], font="Roboto Condensed:style=Bold", size=4.5, halign="center", valign="center");
 
     translate([0, size/2, size/2])
-      rotate([90, 45, 180])
+      rotate([90, -45, 180])
       linear_extrude(3)
       text(face_text[2], font="Roboto Condensed:style=Bold", size=4.5, halign="center", valign="center");
 
@@ -46,17 +46,33 @@ module die(size = 25, radius = 3, face_text) {
   }
 }
 
-die(size = 25, radius = 3, face_text = ["Armbar",
-					"Triangle",
-					"Ezequiel",
+die(size = 25, radius = 3, face_text = ["ARMBAR",
+					"TRIANGLE",
+					"EZEQUIEL",
 					"RNC",
-					"Omoplata",
-					"Ankle Lock"]);
+					"OMOPLATA",
+					"ANKLE LOCK"]);
 
 translate([40, 0, 0])
-die(size = 25, radius = 3, face_text = ["Knee Slice",
-					"X Pass",
-					"Double Under",
-					"Over Under",
-					"Fold Pass",
-					"Leg Drag"]);
+die(size = 25, radius = 3, face_text = ["KNEE SLICE",
+					"X PASS",
+					"DOUBLE UNDER",
+					"OVER UNDER",
+					"FOLD PASS",
+					"LEG DRAG"]);
+
+translate([0, 40, 0])
+die(size = 25, radius = 3, face_text = ["SHRIMP FWD",
+					"SHRIMP BWD",
+					"FRONT ROLL",
+					"BACK ROLL",
+					"STANDUP",
+					"LEG DRAG"]);
+
+translate([40, 40, 0])
+die(size = 25, radius = 3, face_text = ["MOUNT",
+					"SIDE",
+					"HEADLOCK",
+					"TURTLE",
+					"BACK",
+					"HALF GUARD"]);
