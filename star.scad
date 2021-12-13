@@ -1,10 +1,10 @@
-thickness = 5;
-height = 8;
+thickness = 20;
+height = 10;
 num_points = 5;
-outter_radius = 80;
-inner_radius = 40;
+outter_radius = 70;
+inner_radius = 35;
 
-$fn = 60;
+$fn = 100;
 
 star_vertices = function(points, r1, r2)
   [
@@ -23,7 +23,7 @@ star_vertices = function(points, r1, r2)
 
 vertices = star_vertices(num_points, outter_radius, inner_radius);
 
-module Star(thickness, delta) {
+module Star(thickness, delta = 0) {
   difference() {
     offset(thickness / 2)
       offset(delta = -delta)
@@ -36,21 +36,20 @@ module Star(thickness, delta) {
 };
 
 linear_extrude(height, convexity = 5)
-for (i = [0:4])
-  Star(thickness, delta = i * thickness * 2);
+Star(thickness);
 
-translate([0, outter_radius + 8, 0])
+translate([0, outter_radius * 1.35, 0])
 difference() {
   cylinder(h = height, r = 10);
   translate([0, 0, -1])
     cylinder(h = height * 2, r = 5);
 }
 
-translate([- height / 3, 3 + height / 2, 0])
-cube([2 * height / 3, outter_radius - 5, height]);
+translate([- height / 3, outter_radius, 0])
+cube([2 * height / 3, inner_radius / 2, height]);
 
-translate([0, outter_radius - 5, 1])
+translate([0, outter_radius - 5, height*0.9])
 rotate([0, 0, 90])
-linear_extrude(8)
+linear_extrude(2)
 text("#3", font="Roboto Condense:style=Bold", halign = "center",
-     valign = "center", size = 5);
+     valign = "center", size = 10);
