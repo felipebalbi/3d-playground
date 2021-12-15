@@ -49,12 +49,18 @@ difference() {
     holder_base(width, length, height, border_radius);
     
     bearing_holder(bearing_width, bearing_radius,
-		   [border_radius, - 3 * length/8, border_radius * 0.9]);
+		   [-width / 9, - 3 * length/8, border_radius * 0.9]);
 
     bearing_holder(bearing_width, bearing_radius,
-		   [border_radius, 3 * length/8, border_radius * 0.9]);
+		   [-width / 9, 3 * length/8, border_radius * 0.9]);
   }
 
   translate([25, 0, -5])
-  cylinder(r=30, h = 20);
+  cylinder(r=27, h = 20);
 }
+
+translate([-width / 4, 0, 1])
+rotate([0, 0, -90])
+linear_extrude(2.5)
+text("#4", font="Roboto Condense:style=Bold", halign = "center",
+     valign = "center", size = 5);
