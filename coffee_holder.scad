@@ -29,7 +29,7 @@ module box_sleeve(width, depth, height, thickness, radius) {
 
       translate([3 * width / 4, thickness / 2, -1]) {
 	minkowski() {
-          cube([width - thickness / 2, depth - thickness/2, height / 2]);
+          cube([width - thickness / 2, depth - thickness/2, height / 3]);
 	  sphere(thickness / 2, $fn = 60);
         }
       }
@@ -98,8 +98,8 @@ module ramp(width, depth, height, thickness, radius) {
 }
 
 module coffee_holder() {
-  box_sleeve(60, 60, 90, 3, 3);
-  shelf(80, 60, 3);
+  box_sleeve(60, 60, 150, 5, 3);
+  shelf(120, 60, 3.3);
   lip(60, 90);
   ramp(60, 60, 30, 3, 3);
 }
