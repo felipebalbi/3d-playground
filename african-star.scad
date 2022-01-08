@@ -1,4 +1,4 @@
-$fn = 25;
+$fn = 125;
 
 module blank() {
   cylinder(h=3, d=23);
