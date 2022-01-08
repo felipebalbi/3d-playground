@@ -36,7 +36,7 @@ module topaz() {
   difference() {
     blank();
     
-    translate([0, 0, 2.5])
+    translate([0, 0, 2])
     linear_extrude([0, 0, 1])
       text("Topaz", font="Roboto Condense:style=Bold", halign="center", valign="center", size=5);
   }
@@ -46,7 +46,7 @@ module leopard() {
   difference() {
     blank();
 
-    translate([0, 0, 2.5])
+    translate([0, 0, 2])
     linear_extrude([0, 0, 1])
       text("Leopard", font="Roboto Condense:style=Bold", halign="center", valign="center", size=4);
   }
@@ -56,7 +56,7 @@ module emerald() {
   difference() {
     blank();
 
-    translate([0, 0, 2.5])
+    translate([0, 0, 2])
     linear_extrude([0, 0, 1])
       text("Emerald", font="Roboto Condense:style=Bold", halign="center", valign="center", size=4);
   }
@@ -66,7 +66,7 @@ module ruby() {
   difference() {
     blank();
 
-    translate([0, 0, 2.5])
+    translate([0, 0, 2])
     linear_extrude([0, 0, 1])
       text("Ruby", font="Roboto Condense:style=Bold", halign="center", valign="center", size=4);
   }
@@ -105,7 +105,7 @@ module african_star() {
   difference() {
     blank();
 
-    translate([0, 0, 2.5])
+    translate([0, 0, 2])
     linear_extrude(2, convexity = 5)
       Star(2);
   }
