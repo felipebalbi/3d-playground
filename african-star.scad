@@ -111,37 +111,37 @@ module african_star() {
   }
 }
 
-for (x = [0:1:4]) {
-  translate([x*25, 0, 0])
-    horseshoe();
-}
-
 for (x = [0:1:5]) {
-  for (y = [1:1:6]) {
+  for (y = [0:1:1]) {
     translate([x*25, y*25, 0])
       blank();
   }
 }
 
+for (x = [0:1:4]) {
+  translate([x*25, 1*25, 0])
+    horseshoe();
+}
+
 for (x = [0:1:3]) {
-  translate([x*25, 7*25, 0])
+  translate([x*25, 2*25, 0])
     topaz();
 }
 
 for (x = [4:1:6]) {
-  translate([x*25, 7*25, 0])
+  translate([x*25, 2*25, 0])
     leopard();
 }
 
-for (y = [0:1:2]) {
-  translate([6*25, y*25, 0])
+for (x = [0:1:2]) {
+  translate([x*25, 3*25, 0])
     emerald();
 }
 
-for (y = [3:1:4]) {
+for (y = [0:1:1]) {
   translate([6*25, y*25, 0])
     ruby();
 }
 
-translate([6*25, 5*25, 0])
+translate([3*25, 3*25, 0])
 african_star();
