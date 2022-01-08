@@ -118,19 +118,14 @@ for (x = [0:1:5]) {
   }
 }
 
-for (x = [0:1:4]) {
-  translate([x*25, 1*25, 0])
-    horseshoe();
-}
-
 for (x = [0:1:3]) {
   translate([x*25, 2*25, 0])
     topaz();
 }
 
-for (x = [4:1:6]) {
+for (x = [4:1:5]) {
   translate([x*25, 2*25, 0])
-    leopard();
+    ruby();
 }
 
 for (x = [0:1:2]) {
@@ -138,10 +133,15 @@ for (x = [0:1:2]) {
     emerald();
 }
 
-for (y = [0:1:1]) {
-  translate([6*25, y*25, 0])
-    ruby();
+for (x = [3:1:5]) {
+  translate([x*25, 3*25, 0])
+    leopard();
 }
 
-translate([3*25, 3*25, 0])
+translate([0*25, 4*25, 0])
 african_star();
+
+for (x = [1:1:5]) {
+  translate([x*25, 4*25, 0])
+    horseshoe();
+}
