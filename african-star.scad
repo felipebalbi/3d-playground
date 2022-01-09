@@ -1,5 +1,16 @@
 $fn = 125;
 
+print_covers = true;
+
+module cover() {
+  difference() {
+    cylinder(h=3, d=25.5);
+
+    translate([0, 0, 1.5])
+      cylinder(h=3, d=23.8);
+  }
+}
+
 module blank() {
   cylinder(h=3, d=23);
 }
@@ -111,37 +122,51 @@ module african_star() {
   }
 }
 
-for (x = [0:1:5]) {
-  for (y = [0:1:1]) {
-    translate([x*25, y*25, 0])
-      blank();
+if (print_covers) {
+  for (x = [0:1:5]) {
+    for (y = [0:1:4]) {
+      translate([x*26, y*26, 0])
+	cover();
+    }
+
+    for (y = [0:1:2]) {
+      translate([6*26, y*26, 0])
+	cover();
+    }
   }
-}
+} else {
+  for (x = [0:1:5]) {
+    for (y = [0:1:1]) {
+      translate([x*25, y*25, 0])
+	blank();
+    }
+  }
 
-for (x = [0:1:3]) {
-  translate([x*25, 2*25, 0])
-    topaz();
-}
+  for (x = [0:1:3]) {
+    translate([x*25, 2*25, 0])
+      topaz();
+  }
 
-for (x = [4:1:5]) {
-  translate([x*25, 2*25, 0])
-    ruby();
-}
+  for (x = [4:1:5]) {
+    translate([x*25, 2*25, 0])
+      ruby();
+  }
 
-for (x = [0:1:2]) {
-  translate([x*25, 3*25, 0])
-    emerald();
-}
+  for (x = [0:1:2]) {
+    translate([x*25, 3*25, 0])
+      emerald();
+  }
 
-for (x = [3:1:5]) {
-  translate([x*25, 3*25, 0])
-    leopard();
-}
+  for (x = [3:1:5]) {
+    translate([x*25, 3*25, 0])
+      leopard();
+  }
 
-translate([0*25, 4*25, 0])
-african_star();
+  translate([0*25, 4*25, 0])
+    african_star();
 
-for (x = [1:1:5]) {
-  translate([x*25, 4*25, 0])
-    horseshoe();
+  for (x = [1:1:5]) {
+    translate([x*25, 4*25, 0])
+      horseshoe();
+  }
 }
