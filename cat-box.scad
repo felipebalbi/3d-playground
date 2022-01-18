@@ -46,14 +46,22 @@ module paw(size) {
 }
 
 module tail(size) {
-  rotate([0, -35, 0])
+  cube([2*size/5, size/5, size/5], center=true);
+
+  translate([-size/5, size/10-size/5+0.5, 0])
+  cube([size/5, 2*size/5-1, size/5], center=true);
+  
+  rotate_extrude(angle=90)
+    square([size/5, size/5], center=true);
+
+  rotate([0, -35, 90])
   union() {
-    translate([-size/7, 0, size/10])
+    translate([-size/5, size/5, size/2])
       linear_extrude(height=75, scale=1.5)
       square(size/5, center=true);
 
-    translate([-size/7, 0, size/10])
-      cube([size/5, size/5, size], center=true);
+    translate([-size/5, size/5, size/3+0.5])
+      cube([size/5, size/5, size/2], center=true);
   }
 }
 
@@ -72,7 +80,7 @@ module body(abdomen_size, neck_size, paw_size) {
 	  paw(paw_size);
       }
 
-      translate([-13*abdomen_size/27, 0, 7*abdomen_size/9])
+      translate([-13*abdomen_size/27, 0, 6*abdomen_size/9])
 	tail(abdomen_size);
     }
 
