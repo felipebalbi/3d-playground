@@ -45,6 +45,18 @@ module paw(size) {
   }
 }
 
+module tail(size) {
+  rotate([0, -35, 0])
+  union() {
+    translate([-size/7, 0, size/10])
+      linear_extrude(height=75, scale=1.5)
+      square(size/5, center=true);
+
+    translate([-size/7, 0, size/10])
+      cube([size/5, size/5, size], center=true);
+  }
+}
+
 module body(abdomen_size, neck_size, paw_size) {
   difference() {
     union() {
@@ -59,6 +71,9 @@ module body(abdomen_size, neck_size, paw_size) {
         translate(p)
 	  paw(paw_size);
       }
+
+      translate([-13*abdomen_size/27, 0, 7*abdomen_size/9])
+	tail(abdomen_size);
     }
 
     translate([0, 0, abdomen_size*0.75])
@@ -75,6 +90,40 @@ module ear(size) {
 	     [0, 0]]);
 }
 
+module whisker(p, w, l, h) {
+  translate(p)
+    cube([w, l, h], center=true);
+}
+
+module eye(p, w, l, h) {
+  translate(p)
+    cube([w, l, h], center=true);
+}
+
+module face_half(p, size) {
+  translate(p) {
+    /* eye */
+    eye([0, -size/5.5, size/5], size/35, size/15, size/8);
+
+    /* Top whisker */
+    whisker([0, 0, size/15], size/35, size/4, size/45);
+
+    /* bottom whisker */
+    whisker([0, 0, size/30], size/35, size/4, size/45);
+  }
+}
+
+module face(size) {
+  face_half([size/2, size/4, -size*0.65], size);
+
+  mirror([0, 1, 0])
+    face_half([size/2, size/4, -size*0.65], size);
+
+  rotate([0, 90, 0])
+    translate([size*0.60, 0, size*0.49])
+    cylinder(h = size, r=5, $fn=3);
+}
+
 module head(size, neck_size) {
   difference() {
     union() {
@@ -87,32 +136,19 @@ module head(size, neck_size) {
       mirror([0, 1, 0])
 	translate([-size/2, -size/2, 0])
 	ear(abdomen_size);
+
+      /* box lip */
+      translate([0, 0, -abdomen_size*0.87]) {
+	difference() {
+	  cube([2*abdomen_size/3 - 1, 2*abdomen_size/3 - 1, abdomen_size/4], center=true);
+
+	  translate([0, 0, -1])
+	    cube([2*abdomen_size/3 - 5, 2*abdomen_size/3 - 5, abdomen_size/4 + 2], center=true);
+        }
+      }
     }
 
-    translate([size/2, size/4, -size*0.65]) {
-      cube([size/35, size/4, size/25], center=true);
-
-      translate([0, 0, size/15])
-	cube([size/35, size/4, size/25], center=true);
-
-      translate([0, -size/7, size/5])
-	cube([size/35, size/15, size/7], center=true);
-    }
-
-    mirror([0, 1, 0])
-    translate([size/2, size/4, -size*0.65]) {
-      cube([size/35, size/4, size/25], center=true);
-
-      translate([0, 0, size/15])
-	cube([size/35, size/4, size/25], center=true);
-
-      translate([0, -size/7, size/5])
-	cube([size/35, size/15, size/7], center=true);
-    }
-
-    rotate([0, 90, 0])
-    translate([size*0.60, 0, size*0.49])
-      cylinder(h = size, r=5, $fn=3);
+    face(size);
   }
 }
 
