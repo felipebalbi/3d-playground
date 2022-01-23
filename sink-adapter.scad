@@ -1,36 +1,47 @@
 $fn = 50;
 
+/* milimeters in one inch */
+mm_per_inch = 25.4;
+
 height = 100;
 
 inner_diameter_eu = 30;
 outer_diameter_eu = 35;
 
-inner_diameter_us = 33.746;
-outer_diameter_us = 39.84112;
+inner_diameter_us = 2.5 * mm_per_inch;
+outer_diameter_us = 2.75 * mm_per_inch;
 
-extra_outer_thickness = 5;
+extra_outer_thickness = 2;
 
 module adapter(height, outer_us, inner_us, outer_eu, inner_eu, extra)
 {
   union() {
+    /* bottom */
     difference() {
-      cylinder(h=height/2, d=outer_us + extra);
-      translate([0, 0, -1])
-	cylinder(h=(height/2)+2, d=inner_diameter_us);
+      cylinder(h=height/3, d=outer_us + extra);
+
+      translate([0, 0, -1]) {
+	cylinder(h=(height/3)+2, d=inner_us);
+      }
     }
 
-    translate([0, 0, height/2])
+    /* top */
+    translate([0, 0, 2*height/3])
       difference() {
-      cylinder(h=height/2, d=outer_eu + extra);
-      translate([0, 0, -1])
-	cylinder(h=(height/2)+2, d1=inner_us, d2=inner_eu);
+	cylinder(h=height/3, d=outer_eu + extra);
+
+	translate([0, 0, -1]) {
+	  cylinder(h=(height/3)+2, d=inner_eu);
+	}
     }
 
-    translate([0, 0, height/2])
+    /* size transition */
+    translate([0, 0, height/3])
       difference() {
-      cylinder(h=height/5, d1=outer_us + extra, d2=outer_eu + extra);
-      translate([0, 0, -1])
-	cylinder(h=(height/5)+2, d1=outer_eu + extra, d2=outer_eu + extra);
+      cylinder(h=height/3, d1=outer_us + extra, d2=outer_eu + extra);
+
+      translate([0, 0, 0])
+	cylinder(h=(height/3), d1=inner_us, d2=inner_eu);
     }
   }
 }
