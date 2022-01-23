@@ -1,54 +1,71 @@
-$fn = 50;
+/* [Hidden] */
+// Number Of Faces
+$fn = 200;
 
-/* milimeters in one inch */
+// milimeters in one inch
 mm_per_inch = 25.4;
 
-height = 100;
+/* [Parameters] */
+// Total height of the part (in mm)
+Height = 100;
 
-inner_diameter_eu = 30;
-outer_diameter_eu = 35;
+// US Standard Pipe Outer Diameter (in inches)
+Diameter_US = 2.5;
 
-inner_diameter_us = 2.5 * mm_per_inch;
-outer_diameter_us = 2.75 * mm_per_inch;
+// EU Standard Pipe Outer Diameter (in mm)
+Diameter_EU = 35;
 
-extra_outer_thickness = 2;
+// Thickness Of The Wall (in mm)
+Wall_Thickness = 5;
 
-inner_offset_us = 0;
-inner_offset_eu = 0;
+// Tolerance (in mm)
+Tolerance = 0;
 
-module adapter(height, outer_us, inner_us, offset_us, outer_eu, inner_eu, offset_eu, extra)
+module adapter(height=100, dia_us=2.5, dia_eu=35, thickness=5, tolerance=0)
 {
+  out_us = (dia_us * mm_per_inch) + thickness;
+  in_us = (dia_us * mm_per_inch) + tolerance;
+
+  out_eu = dia_eu + thickness;
+  in_eu = dia_eu + tolerance;
+
   union() {
     /* bottom */
     difference() {
-      cylinder(h=height/3, d=outer_us + extra);
+      cylinder(h=height/3, d=out_us);
 
       translate([0, 0, -1]) {
-	cylinder(h=(height/3)+2, d=inner_us + offset_us);
+	cylinder(h=(height/3)+2, d=in_us);
       }
     }
 
     /* top */
     translate([0, 0, 2*height/3])
       difference() {
-	cylinder(h=height/3, d=outer_eu + extra);
+	cylinder(h=height/3, d=out_eu);
 
 	translate([0, 0, -1]) {
-	  cylinder(h=(height/3)+2, d=inner_eu + offset_eu);
+	  cylinder(h=(height/3)+2, d=in_eu);
 	}
     }
 
     /* size transition */
     translate([0, 0, height/3])
       difference() {
-      cylinder(h=height/3, d1=outer_us + extra, d2=outer_eu + extra);
+      cylinder(h=height/3, d1=out_us, d2=out_eu);
 
-      translate([0, 0, 0])
-	cylinder(h=(height/3), d1=inner_us + offset_us, d2=inner_eu + offset_eu);
+      union() {
+	cylinder(h=(height/3), d1=in_us, d2=in_eu);
+
+	translate([0, 0, -0.99])
+	  cylinder(h=1, d=in_us);
+
+	translate([0, 0, (height/3)-0.01])
+	  cylinder(h=1, d=in_eu);
+      }
     }
   }
 }
 
-adapter(height, extra = extra_outer_thickness,
-	outer_us = outer_diameter_us, inner_us = inner_diameter_us, offset_us=inner_offset_us,
-	outer_eu = outer_diameter_eu, inner_eu = inner_diameter_eu, offset_eu=inner_offset_eu);
+adapter(Height, dia_us = Diameter_US, dia_eu = Diameter_EU,
+	thickness = Wall_Thickness, tolerance = Tolerance);
