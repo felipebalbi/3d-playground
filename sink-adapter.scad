@@ -13,7 +13,10 @@ outer_diameter_us = 2.75 * mm_per_inch;
 
 extra_outer_thickness = 2;
 
-module adapter(height, outer_us, inner_us, outer_eu, inner_eu, extra)
+inner_offset_us = 0;
+inner_offset_eu = 0;
+
+module adapter(height, outer_us, inner_us, offset_us, outer_eu, inner_eu, offset_eu, extra)
 {
   union() {
     /* bottom */
@@ -21,7 +24,7 @@ module adapter(height, outer_us, inner_us, outer_eu, inner_eu, extra)
       cylinder(h=height/3, d=outer_us + extra);
 
       translate([0, 0, -1]) {
-	cylinder(h=(height/3)+2, d=inner_us);
+	cylinder(h=(height/3)+2, d=inner_us + offset_us);
       }
     }
 
@@ -31,7 +34,7 @@ module adapter(height, outer_us, inner_us, outer_eu, inner_eu, extra)
 	cylinder(h=height/3, d=outer_eu + extra);
 
 	translate([0, 0, -1]) {
-	  cylinder(h=(height/3)+2, d=inner_eu);
+	  cylinder(h=(height/3)+2, d=inner_eu + offset_eu);
 	}
     }
 
@@ -41,11 +44,11 @@ module adapter(height, outer_us, inner_us, outer_eu, inner_eu, extra)
       cylinder(h=height/3, d1=outer_us + extra, d2=outer_eu + extra);
 
       translate([0, 0, 0])
-	cylinder(h=(height/3), d1=inner_us, d2=inner_eu);
+	cylinder(h=(height/3), d1=inner_us + offset_us, d2=inner_eu + offset_eu);
     }
   }
 }
 
 adapter(height, extra = extra_outer_thickness,
-	outer_us = outer_diameter_us, inner_us = inner_diameter_us,
-	outer_eu = outer_diameter_eu, inner_eu = inner_diameter_eu);
+	outer_us = outer_diameter_us, inner_us = inner_diameter_us, offset_us=inner_offset_us,
+	outer_eu = outer_diameter_eu, inner_eu = inner_diameter_eu, offset_eu=inner_offset_eu);
