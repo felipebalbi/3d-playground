@@ -30,6 +30,9 @@ wall_thickness = 3;
 // Wall radius (mm)
 wall_radius = 3;
 
+// Box vs Lid Ratio
+ratio = 2/3;
+
 module box_walls(width, length, height, thickness, radius) {
   linear_extrude(height)
   difference() {
@@ -90,8 +93,8 @@ module lid(width, length, height, thickness, radius,
   }
 }
 
-box(box_width, box_length, 2 * box_height / 3,
+box(box_width, box_length, box_height * ratio,
     wall_thickness, wall_radius);
 
 translate([box_width + 2 * wall_thickness + 2 * wall_radius + 2, 0, 0])
-lid(box_width, box_length, box_height / 3, wall_thickness, wall_radius);
+lid(box_width, box_length, box_height * (1 - ratio), wall_thickness, wall_radius);
