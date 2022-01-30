@@ -96,5 +96,5 @@ module lid(width, length, height, thickness, radius,
 box(box_width, box_length, box_height,
     wall_thickness, wall_radius);
 
-translate([box_width + 2 * wall_thickness + 5, 0, 0])
+translate([box_width + 2 * wall_thickness + 2 * wall_radius + 2, 0, 0])
 lid(box_width, box_length, lid_height, wall_thickness, wall_radius);
