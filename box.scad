@@ -48,7 +48,7 @@ module box_walls(width, length, height, thickness, radius) {
   }
 }
 
-module box_lip(width, length, thickness, radius, lip = lip_thickness) {
+module box_lip(width, length, thickness, radius, lip) {
   linear_extrude(thickness + lip)
     minkowski() {
     square([width + lip, length + lip], center = true);
@@ -73,12 +73,12 @@ module box_body(width, length, height, thickness, radius) {
   }
 }
 
-module box(width, length, height, thickness, radius) {
+module box(width, length, height, thickness, radius, lip = lip_thickness) {
   difference() {
     box_body(width, length, height, thickness, radius);
 
     translate([0, 0, height])
-      box_lip(width, length, thickness, radius);
+      box_lip(width, length, thickness, radius, lip);
   }
 }
 
