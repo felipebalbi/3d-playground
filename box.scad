@@ -77,7 +77,7 @@ module box(width, length, height, thickness, radius, lip = lip_thickness) {
   difference() {
     box_body(width, length, height, thickness, radius);
 
-    translate([0, 0, height])
+    translate([0, 0, height - lip])
       box_lip(width, length, thickness, radius, lip);
   }
 }
