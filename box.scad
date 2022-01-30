@@ -31,7 +31,7 @@ wall_thickness = 3;
 wall_radius = 1;
 
 // Box vs Lid Ratio
-ratio = 2/3;
+ratio = 4/5;
 
 module box_walls(width, length, height, thickness, radius) {
   linear_extrude(height)
@@ -66,10 +66,10 @@ module box_floor(width, length, thickness, radius) {
 
 module box_body(width, length, height, thickness, radius) {
   union() {
+    box_floor(width, length, thickness, radius);
+
     translate([0, 0, thickness])
       box_walls(width, length, height, thickness, radius);
-
-    box_floor(width, length, thickness, radius);
   }
 }
 
@@ -97,4 +97,5 @@ box(box_width, box_length, box_height * ratio,
     wall_thickness, wall_radius);
 
 translate([box_width + 2 * wall_thickness + 2 * wall_radius + 2, 0, 0])
-lid(box_width, box_length, box_height * (1 - ratio), wall_thickness, wall_radius);
+lid(box_width, box_length, box_height * (1 - ratio) + wall_thickness,
+    wall_thickness, wall_radius);
