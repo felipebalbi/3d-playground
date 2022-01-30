@@ -16,13 +16,13 @@ lip_slack = 0.25;
 
 /* [Parameters] */
 // Total Box Width (mm)
-box_width = 57;
+box_width = 22;
 
 // Total Box Length (mm)
-box_length = 38;
+box_length = 13;
 
 // Total Box Height (mm)
-box_height = 90;
+box_height = 71;
 
 // Wall Thickness (mm)
 wall_thickness = 3;
@@ -37,12 +37,12 @@ module box_walls(width, length, height, thickness, radius) {
   linear_extrude(height)
   difference() {
     minkowski() {
-      square([width + thickness, length + thickness], center = true);
+      square([width + thickness - radius, length + thickness - radius], center = true);
       circle(radius);
     }
 
     minkowski() {
-      square([width, length], center = true);
+      square([width - radius, length - radius], center = true);
       circle(radius);
     }
   }
@@ -51,7 +51,7 @@ module box_walls(width, length, height, thickness, radius) {
 module box_lip(width, length, thickness, radius, lip) {
   linear_extrude(thickness + lip)
     minkowski() {
-    square([width + lip, length + lip], center = true);
+    square([width + lip - radius, length + lip - radius], center = true);
     circle(radius);
   }
 }
@@ -59,7 +59,7 @@ module box_lip(width, length, thickness, radius, lip) {
 module box_floor(width, length, thickness, radius) {
   linear_extrude(thickness)
     minkowski() {
-    square([width + thickness, length + thickness], center = true);
+    square([width + thickness - radius, length + thickness - radius], center = true);
     circle(radius);
   }
 }
