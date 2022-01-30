@@ -9,26 +9,23 @@
 $fn = 100;
 
 // Box & Lid lip
-lip_thickness = 2;
+lip_thickness = 1;
 
 // Box & Lip slack
-lip_slack = 0;
+lip_slack = 0.25;
 
 /* [Parameters] */
-// Box Width (mm)
+// Total Box Width (mm)
 box_width = 57;
 
-// Box Length (mm)
+// Total Box Length (mm)
 box_length = 38;
 
-// Box Height (mm)
-box_height = 2*90/3;
-
-// Lid Height (mm)
-lid_height = 90/3;
+// Total Box Height (mm)
+box_height = 90;
 
 // Wall Thickness (mm)
-wall_thickness = 6;
+wall_thickness = 3;
 
 // Wall radius (mm)
 wall_radius = 3;
@@ -93,8 +90,8 @@ module lid(width, length, height, thickness, radius,
   }
 }
 
-box(box_width, box_length, box_height,
+box(box_width, box_length, 2 * box_height / 3,
     wall_thickness, wall_radius);
 
 translate([box_width + 2 * wall_thickness + 2 * wall_radius + 2, 0, 0])
-lid(box_width, box_length, lid_height, wall_thickness, wall_radius);
+lid(box_width, box_length, box_height / 3, wall_thickness, wall_radius);
