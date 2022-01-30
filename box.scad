@@ -6,7 +6,7 @@
 
 /* [Hidden] */
 // Number Of Faces
-$fn = 60;
+$fn = 100;
 
 // Box & Lid lip
 lip_thickness = 2;
