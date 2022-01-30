@@ -9,7 +9,7 @@
 $fn = 100;
 
 // Box & Lid lip
-lip_thickness = 1;
+lip_thickness = 1.5;
 
 // Box & Lip slack
 lip_slack = 0.25;
@@ -28,7 +28,7 @@ box_height = 71;
 wall_thickness = 3;
 
 // Wall radius (mm)
-wall_radius = 3;
+wall_radius = 1;
 
 // Box vs Lid Ratio
 ratio = 2/3;
