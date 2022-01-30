@@ -9,7 +9,7 @@
 $fn = 100;
 
 // Box & Lid lip
-lip_thickness = 1.5;
+lip_thickness = 2;
 
 // Box & Lip slack
 lip_slack = 0.25;
@@ -25,7 +25,7 @@ box_length = 13;
 box_height = 71;
 
 // Wall Thickness (mm)
-wall_thickness = 3;
+wall_thickness = 5;
 
 // Wall radius (mm)
 wall_radius = 1;
@@ -77,7 +77,7 @@ module box(width, length, height, thickness, radius, lip = lip_thickness) {
   difference() {
     box_body(width, length, height, thickness, radius);
 
-    translate([0, 0, height - lip])
+    translate([0, 0, height - lip/2])
       box_lip(width, length, thickness, radius, lip);
   }
 }
