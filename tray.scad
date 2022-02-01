@@ -1,9 +1,11 @@
-rows = 5;
-cols = 7;
+$fn = 100;
 
-width = 20;
-length = 45;
-height = 15;
+rows = 5;
+cols = 4;
+
+width = 25;
+length = 25;
+height = 25;
 
 module tray_base(width, length, height, thickness, radius) {
   linear_extrude(height) {
