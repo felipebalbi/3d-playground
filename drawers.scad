@@ -3,7 +3,7 @@ $fn = 100;
 border_thickness = 1;
 border_radius = 2;
 
-drawer_width = 125;
+drawer_width = 90;
 drawer_length = 30;
 drawer_height = 50;
 drawer_spacing = 5;
@@ -143,6 +143,16 @@ module drawer_system(width, length, height, spacing, thickness, radius, num) {
   drawer_system_dividers(width, length, height, spacing, thickness, radius, num);
 }
 
+module drawer(width, length, height, thickness, radius) {
+  linear_extrude(height)
+  drawer_system_profile(width, length, radius);
+}
+
 drawer_system(drawer_width, drawer_length, drawer_height, drawer_spacing,
 	      border_thickness, border_radius, num_drawers);
 
+translate([border_thickness+border_radius + drawer_width/3, border_thickness+border_radius*2+border_thickness+2, border_thickness+1])
+rotate([0, 0, 90])
+color("silver")
+drawer(drawer_width + border_radius + border_thickness*2, drawer_length - border_thickness*2 - border_radius, drawer_height - border_thickness - 1,
+	border_thickness, border_radius);
