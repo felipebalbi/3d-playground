@@ -80,20 +80,69 @@ module drawer_system_body(width, length, height, spacing, thickness, radius, num
   }
 }
 
-module drawer_system_dividers(width, length, height, spacing, thickness, num) {
+module drawer_system_dividers(width, length, height, spacing, thickness, radius, num) {
   total_length = (length + spacing) * num;
-  
+
   for (i = [width/3+spacing:width/3:width-1]) {
-    translate([i, 0, 0]) {
-      cube([thickness, total_length, height]);
+    translate([i, thickness + 2*radius, 0]) {
+      union() {
+	translate([thickness, 0, 0])
+	linear_extrude(drawer_height)
+	  difference() {
+	  square(border_radius);
+
+	  translate([border_radius, border_radius])
+	    circle(border_radius);
+	}
+
+	mirror([1, 0, 0])
+	  linear_extrude(drawer_height)
+	  difference() {
+	  square(border_radius);
+
+	  translate([border_radius, border_radius])
+	    circle(border_radius);
+	}
+
+	cube([thickness, spacing, height]);
+      }
+    }
+  }
+
+  translate([0, total_length + thickness + 2*radius, 0])
+  mirror([0, 1, 0])
+  for (i = [width/3+spacing:width/3:width-1]) {
+    translate([i, thickness + 2*radius, 0]) {
+      union() {
+	translate([thickness, 0, 0])
+	linear_extrude(drawer_height)
+	  difference() {
+	  square(border_radius);
+
+	  translate([border_radius, border_radius])
+	    circle(border_radius);
+	}
+
+	mirror([1, 0, 0])
+	  linear_extrude(drawer_height)
+	  difference() {
+	  square(border_radius);
+
+	  translate([border_radius, border_radius])
+	    circle(border_radius);
+	}
+
+	cube([thickness, spacing, height]);
+      }
     }
   }
 }
 
 module drawer_system(width, length, height, spacing, thickness, radius, num) {
   drawer_system_body(width, length, height, spacing, thickness, radius, num);
-  drawer_system_dividers(width, length, height, spacing, thickness, num);
+  drawer_system_dividers(width, length, height, spacing, thickness, radius, num);
 }
 
 drawer_system(drawer_width, drawer_length, drawer_height, drawer_spacing,
 	      border_thickness, border_radius, num_drawers);
+
