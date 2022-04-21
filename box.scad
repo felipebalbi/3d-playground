@@ -25,7 +25,7 @@ box_length = 13;
 box_height = 71;
 
 // Wall Thickness (mm)
-wall_thickness = 5;
+wall_thickness = 2.5;
 
 // Wall radius (mm)
 wall_radius = 1;
@@ -37,7 +37,9 @@ module box_walls(width, length, height, thickness, radius) {
   linear_extrude(height)
   difference() {
     minkowski() {
-      square([width + thickness - radius, length + thickness - radius], center = true);
+      total_width = width + 2 * thickness - radius;
+      total_length = length + 2 * thickness - radius;
+      square([total_width, total_length], center = true);
       circle(radius);
     }
 
@@ -49,7 +51,7 @@ module box_walls(width, length, height, thickness, radius) {
 }
 
 module box_lip(width, length, thickness, radius, lip) {
-  linear_extrude(thickness + lip)
+  linear_extrude(2 * thickness + lip)
     minkowski() {
     square([width + lip - radius, length + lip - radius], center = true);
     circle(radius);
@@ -59,7 +61,7 @@ module box_lip(width, length, thickness, radius, lip) {
 module box_floor(width, length, thickness, radius) {
   linear_extrude(thickness)
     minkowski() {
-    square([width + thickness - radius, length + thickness - radius], center = true);
+    square([width + 2 * thickness - radius, length + 2 * thickness - radius], center = true);
     circle(radius);
   }
 }
