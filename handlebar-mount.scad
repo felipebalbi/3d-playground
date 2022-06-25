@@ -1,5 +1,8 @@
 $fn = $preview ? 10 : 100;
 
+/* Printing a test piece? */
+test = false;
+
 /*
  * Thickness of material
  *
@@ -20,7 +23,7 @@ handlebar_thickness = handlebar_diameter + 2 * thickness;
 margin = 5;
 
 /* Height of extrusion */
-extrusion_height = 35;
+extrusion_height = test ? 7 : 35;
 
 /* Tolerance */
 tolerance = 0.2;
@@ -104,20 +107,30 @@ module handlebar_back() {
       }
     }
 
-    translate([(wingspan + handlebar_thickness) / 2, 0, head_diameter/2 + margin]) {
-      screw_hole();
-    }
+    if (test) {
+      translate([(wingspan + handlebar_thickness) / 2, 0, extrusion_height/2]) {
+	screw_hole();
+      }
 
-    translate([(wingspan + handlebar_thickness) / 2, 0, extrusion_height - head_diameter/2 - margin]) {
-      screw_hole();
-    }
+      translate([-(wingspan + handlebar_thickness) / 2, 0, extrusion_height/2]) {
+        screw_hole();
+      }
+    } else {
+      translate([(wingspan + handlebar_thickness) / 2, 0, head_diameter/2 + margin]) {
+	screw_hole();
+      }
 
-    translate([-(wingspan + handlebar_thickness) / 2, 0, head_diameter/2 + margin]) {
-      screw_hole();
-    }
+      translate([(wingspan + handlebar_thickness) / 2, 0, extrusion_height - head_diameter/2 - margin]) {
+	screw_hole();
+      }
 
-    translate([-(wingspan + handlebar_thickness) / 2, 0, extrusion_height - head_diameter/2 - margin]) {
-      screw_hole();
+      translate([-(wingspan + handlebar_thickness) / 2, 0, head_diameter/2 + margin]) {
+	screw_hole();
+      }
+
+      translate([-(wingspan + handlebar_thickness) / 2, 0, extrusion_height - head_diameter/2 - margin]) {
+	screw_hole();
+      }
     }
   }
 }
