@@ -87,22 +87,22 @@ module handle_cutout() {
   }
 }
 
-module screw() {
+module screw(nut) {
   union() {
     cylinder(d = transition_diameter, h = thickness - head_height);
 
     translate([0, 0, thickness - head_height])
-      cylinder(d = head_diameter, h = head_height);
+      cylinder(d = head_diameter, h = head_height, $fn = nut ? 6 : 50);
   }
 }
 
-module screw_hole() {
+module screw_hole(nut) {
   rotate([-90, 0, 0]) {
-    screw();
+    screw(nut);
   }
 }
 
-module handlebar_back() {
+module handlebar_back(nut) {
   difference() {
     linear_extrude(extrusion_height) {
       union() {
@@ -111,19 +111,23 @@ module handlebar_back() {
       }
     }
 
-    translate([wingspan + handlebar_diameter/2 + thickness/2, 0, extrusion_height/2]) {
-      screw_hole();
+    translate([wingspan + handlebar_diameter/2 + thickness/2,
+	       0,
+	       extrusion_height/2]) {
+      screw_hole(nut);
     }
 
-  translate([-(wingspan + handlebar_diameter/2 + thickness/2), 0, extrusion_height/2])
+  translate([-(wingspan + handlebar_diameter/2 + thickness/2),
+	     0,
+	     extrusion_height/2])
  {
-      screw_hole();
+      screw_hole(nut);
     }
   }
 }
 
-module handlebar_mount() {
-  handlebar_back();
+module handlebar_mount(nut) {
+  handlebar_back(nut);
 }
 
-handlebar_mount();
+handlebar_mount(nut = true);
