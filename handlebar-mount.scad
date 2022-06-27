@@ -1,4 +1,4 @@
-$fn = $preview ? 10 : 100;
+$fn = $preview ? 25 : 100;
 
 /*
  * Thickness of material
@@ -8,7 +8,7 @@ $fn = $preview ? 10 : 100;
 thickness = 15;
 
 /* How much material to screw on */
-wingspan = 10;
+wingspan = 20;
 
 /* Diameter of handlebar */
 handlebar_diameter = 24;
@@ -20,7 +20,7 @@ handlebar_thickness = handlebar_diameter + 2 * thickness;
 margin = 5;
 
 /* Height of extrusion */
-extrusion_height = 15;
+extrusion_height = 12;
 
 /* Tolerance */
 tolerance = 0.2;
@@ -42,51 +42,6 @@ transition_diameter = 3.6 + tolerance;
 nut_height = 2.4 + tolerance;
 nut_diameter = 6 + tolerance;
 
-module wing_rounded_edge() {
-  difference() {
-    circle(r = thickness);
-
-    translate([0, -thickness/2 - 2.5])
-      square([2 * thickness, thickness + 5], center = true);
-
-    translate([-thickness/2, thickness/2])
-      square(thickness, center = true);
-  }
-}
-
-module wing() {
-  hull() {
-    square(thickness);
-
-    translate([wingspan, 0]) {
-      wing_rounded_edge();
-    }
-  }
-}
-
-module screw_base() {
-  translate([(handlebar_thickness + handlebar_diameter)/4, 0 ,0]) {
-    wing();
-  }
-
-  mirror([1, 0, 0]) {
-    translate([(handlebar_thickness + handlebar_diameter)/4, 0 ,0]) {
-      wing();
-    }
-  }
-}
-
-module handle_cutout() {
-  difference() {
-    circle(d = handlebar_thickness);
-    circle(d = handlebar_diameter);
-
-    mirror([0, 1, 0])
-      translate([-handlebar_thickness, 0])
-	square(2 * handlebar_thickness);
-  }
-}
-
 module screw(nut) {
   union() {
     cylinder(d = transition_diameter, h = thickness - head_height);
@@ -102,32 +57,46 @@ module screw_hole(nut) {
   }
 }
 
-module handlebar_back(nut) {
+module wing_corner_cutout(size, height) {
+  translate([0, 0, -1])
+  linear_extrude(height + 2)
   difference() {
-    linear_extrude(extrusion_height) {
-      union() {
-	handle_cutout();
-	screw_base();
-      }
-    }
-
-    translate([wingspan + handlebar_diameter/2 + thickness/2,
-	       0,
-	       extrusion_height/2]) {
-      screw_hole(nut);
-    }
-
-  translate([-(wingspan + handlebar_diameter/2 + thickness/2),
-	     0,
-	     extrusion_height/2])
- {
-      screw_hole(nut);
-    }
+    square([size / 2, size / 2]);
+    circle(size / 2);
   }
 }
 
-module handlebar_mount(nut) {
-  handlebar_back(nut);
+module handlebar_cutout(width, length, radius) {
+  rotate_extrude(angle = 180)
+  translate([radius, 0, 0])
+    square([width, length]);
 }
 
-handlebar_mount(nut = true);
+module wing(width, length, height, nut) {
+  difference() {
+    cube([width, length, height]);
+
+    /* Rounded corner */
+    translate([width / 2, length / 3, 0])
+      wing_corner_cutout(width, extrusion_height);
+
+    /* M3 Screw Hole */
+    translate([width / 2, 0, height / 2])
+      screw_hole(nut);
+  }
+}
+
+module mount(nut) {
+  wing_position = (handlebar_diameter + handlebar_thickness) / 4;
+
+  handlebar_cutout(thickness, extrusion_height, handlebar_diameter/2);
+
+  translate([wing_position, 0, 0])
+    wing(wingspan, thickness, extrusion_height, nut);
+
+  mirror([1, 0, 0])
+  translate([wing_position, 0, 0])
+    wing(wingspan, thickness, extrusion_height, nut);
+}
+
+mount(false);
