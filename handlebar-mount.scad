@@ -86,17 +86,62 @@ module wing(width, length, height, nut) {
   }
 }
 
-module mount(nut) {
-  wing_position = (handlebar_diameter + handlebar_thickness) / 4;
-
-  handlebar_cutout(thickness, extrusion_height, handlebar_diameter/2);
-
-  translate([wing_position, 0, 0])
-    wing(wingspan, thickness, extrusion_height, nut);
-
-  mirror([1, 0, 0])
-  translate([wing_position, 0, 0])
-    wing(wingspan, thickness, extrusion_height, nut);
+module top_mount_bracket(thickness, height, radius) {
+  translate([0, thickness/2 + height, height / 2])
+    rotate([90, 0, 0])
+    cylinder(h = radius, d = height);
 }
 
-mount(false);
+module mount(top) {
+  wing_position = (handlebar_diameter + handlebar_thickness) / 4;
+  nut = !top;
+
+  difference() {
+    union() {
+      handlebar_cutout(thickness, extrusion_height, handlebar_diameter/2);
+
+      translate([wing_position, 0, 0])
+	wing(wingspan, thickness, extrusion_height, nut);
+
+      mirror([1, 0, 0])
+	translate([wing_position, 0, 0])
+	wing(wingspan, thickness, extrusion_height, nut);
+
+      if (top) 
+	top_mount_bracket(handlebar_thickness, extrusion_height, thickness);
+    }
+
+    if (top) {
+      rotate([90, 0, 0]) {
+	translate([0, extrusion_height/2, 0]) {
+          translate([0, 0, -(handlebar_thickness / 2 + extrusion_height + 1)]) {
+	    /* screw body */
+	    cylinder(h = 3 * thickness, d = transition_diameter);
+
+	    /* screw head */
+	    cylinder(h = head_height + 1, d = head_diameter);
+	  }
+
+	  /* nut */
+	  translate([0, 0, - handlebar_diameter/2 - head_height]) {
+	    cylinder(d = head_diameter, h = head_height + 1, $fn = 6);
+	  }
+        }
+      }
+    }
+  }
+}
+
+module top_mount() {
+  mount(true);
+}
+
+module bottom_mount() {
+  mount(false);
+}
+
+top_mount();
+
+translate([0, -10, 0])
+mirror([0, 1, 0])
+bottom_mount();
