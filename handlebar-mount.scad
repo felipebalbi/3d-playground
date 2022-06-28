@@ -5,10 +5,10 @@ $fn = $preview ? 25 : 100;
  *
  * Must be thick as we want to countersink the M3 screws
  */
-thickness = 15;
+thickness = 8;
 
 /* How much material to screw on */
-wingspan = 20;
+wingspan = 12;
 
 /* Diameter of handlebar */
 handlebar_diameter = 24;
@@ -87,7 +87,7 @@ module wing(width, length, height, nut) {
 }
 
 module top_mount_bracket(thickness, height, radius) {
-  translate([0, thickness/2 + height, height / 2])
+  translate([0, thickness/2 + radius - 2, height / 2])
     rotate([90, 0, 0])
     cylinder(h = radius, d = height);
 }
@@ -142,6 +142,6 @@ module bottom_mount() {
 
 top_mount();
 
-translate([0, -10, 0])
+translate([0, -5, 0])
 mirror([0, 1, 0])
 bottom_mount();
