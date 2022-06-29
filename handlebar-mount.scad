@@ -108,15 +108,15 @@ module mount(top) {
 	wing(wingspan, thickness, extrusion_height, nut);
 
       if (top) 
-	top_mount_bracket(handlebar_thickness, extrusion_height, thickness);
+	top_mount_bracket(handlebar_thickness, extrusion_height, thickness * 2);
     }
 
     if (top) {
       rotate([90, 0, 0]) {
 	translate([0, extrusion_height/2, 0]) {
-          translate([0, 0, -(handlebar_thickness / 2 + extrusion_height + 1)]) {
+          translate([0, 0, -(handlebar_thickness + extrusion_height + 1)]) {
 	    /* screw body */
-	    cylinder(h = 3 * thickness, d = transition_diameter);
+	    cylinder(h = 5 * thickness, d = transition_diameter);
 
 	    /* screw head */
 	    cylinder(h = head_height + 1, d = head_diameter);
@@ -140,8 +140,43 @@ module bottom_mount() {
   mount(false);
 }
 
+module radio_mount(w, l, h, r) {
+  points = [[r, r],
+	    [w - r, r],
+	    [r, l - r],
+	    [w - r , l - r]];
+
+  difference() {
+    hull() {
+      for (p = points) {
+	translate(p) cylinder(h = h, r = r);
+      }
+    }
+
+    translate([w/2, l/2, -1]) {
+      cylinder(d = extrusion_height + tolerance, h = h * 0.5);
+      cylinder(d = transition_diameter, h = h * 1.5);
+
+      translate([0, 0, h - head_diameter])
+        cylinder(d = head_diameter, h = h/2);
+    }
+
+    hull() {
+      translate([4, 4, -1]) {
+	cylinder(r = 2, h = h * 1.5);
+
+	translate([0, l - 8, 0])
+	  cylinder(r = 2, h = h * 1.5);
+      }
+    }
+  }
+}
+
 top_mount();
 
 translate([0, -5, 0])
 mirror([0, 1, 0])
 bottom_mount();
+
+translate([handlebar_thickness + thickness, 0, 0])
+radio_mount(handlebar_thickness/2, handlebar_thickness - 5, 70, 2);
