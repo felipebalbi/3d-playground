@@ -13,7 +13,7 @@ aaa_diameter = 10.2;
 aaa_height = 44.4;
 
 ratio = 4/5;
-tolerance = 0.8;
+tolerance = 1.2;
 
 wall_thickness = 2;
 rows = 8;
@@ -80,7 +80,7 @@ module body(is_aa = true) {
       rotate([90, 0, 0])
       linear_extrude(wall_thickness)
       text("Charged",
-	   font="Roboto Condense:style=Bold",
+	   font="Roboto Condensed:style=Bold",
 	   halign="center",
 	   valign="center",
 	   size=is_aa ? 15 : 11);
@@ -89,7 +89,7 @@ module body(is_aa = true) {
       rotate([90, 0, 180])
       linear_extrude(wall_thickness)
       text("Discharged",
-	   font="Roboto Condense:style=Bold",
+	   font="Roboto Condensed:style=Bold",
 	   halign="center",
 	   valign="center",
 	   size=is_aa ? 15 : 11);
