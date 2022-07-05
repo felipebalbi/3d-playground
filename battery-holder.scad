@@ -7,7 +7,7 @@
 $fn = $preview ? 25 : 100;
 
 aa_diameter = 14.2;
-aa_height = 44.4;
+aa_height = 50.4;
 
 aaa_diameter = 10.2;
 aaa_height = 44.4;
@@ -96,4 +96,4 @@ module body(is_aa = true) {
   }
 }
 
-body(is_aa = false);
+body(is_aa = true);
