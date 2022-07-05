@@ -58,6 +58,7 @@ module battery_matrix(width, height, diameter, rows, cols) {
 module body(is_aa = true) {
   battery_diameter = tolerance + (is_aa ? aa_diameter : aaa_diameter);
   battery_height = is_aa ? aa_height : aaa_height;
+  font_size = is_aa ? 18 : 14;
 
   width = rows * battery_diameter + 2 * wall_thickness;
   length = cols * (battery_diameter + wall_thickness) + wall_thickness;
@@ -83,7 +84,7 @@ module body(is_aa = true) {
 	   font="Roboto Condensed:style=Bold",
 	   halign="center",
 	   valign="center",
-	   size=is_aa ? 15 : 11);
+	   size=font_size);
 
     translate([width / 2, length - wall_thickness/4, battery_height / 2 * ratio])
       rotate([90, 0, 180])
@@ -92,7 +93,7 @@ module body(is_aa = true) {
 	   font="Roboto Condensed:style=Bold",
 	   halign="center",
 	   valign="center",
-	   size=is_aa ? 15 : 11);
+	   size=font_size);
   }
 }
 
