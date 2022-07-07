@@ -44,10 +44,10 @@ nut_diameter = 7.5 + tolerance;
 
 test = false;
 
-radio_clip_thickness = 4;
+radio_clip_thickness = 3.2;
 radio_clip_radius = 4;
 radio_clip_width = 26;
-radio_clip_catch = 12.4;
+radio_clip_catch = 8;
 radio_clip_length = extrusion_height + radio_clip_catch + radio_clip_thickness * 2;
 radio_clip_height = test ? 10 : 21.6;
 
@@ -149,6 +149,19 @@ module bottom_mount() {
   mount(false);
 }
 
+module radio_clip_cutout(w, l, h, t, r) {
+  points = [[r		, r],
+	    [w - r	, r],
+	    [r		, l - r],
+	    [w - r	, l - r]];
+
+  hull() {
+    for (p = points) {
+      translate(p) cylinder(h = h + 2, r = r);
+    }
+  }
+}
+
 module radio_mount(w, l, h, r, t) {
   width = w + 2 * t;
   length = l + 2 * t;
@@ -169,13 +182,8 @@ module radio_mount(w, l, h, r, t) {
     }
 
     /* Radio Clip Cutout */
-    hull() {
-      translate([t + radio_clip_catch / 2, t +  radio_clip_catch / 2, -1])
-	cylinder(d = radio_clip_catch, h = h + 2);
-
-      translate([width - t - radio_clip_catch / 2, t + radio_clip_catch / 2, -1])
-	cylinder(d = radio_clip_catch, h = h + 2);
-    }
+    translate([t, t, -1])
+      radio_clip_cutout(radio_clip_width, radio_clip_catch, h, t, 2);
 
     /* Mounting Hole */
     translate([width / 2, -1, h / 2])
@@ -185,7 +193,12 @@ module radio_mount(w, l, h, r, t) {
     }
 
     translate([width / 2, length / 2 - r - extrusion_height + 3, h / 2 - (extrusion_height + 1) / 2])
-    top_mount_bracket(handlebar_thickness, extrusion_height + 1, thickness * 2);
+    top_mount_bracket(handlebar_thickness, extrusion_height + 0.4, thickness * 2);
+
+    /* Insertion relief */
+    translate([t, t+1, h - 2 * t])
+      rotate([30, 0, 0])
+      cube([w, 2 * t, h / 3]);
   }
 }
 
