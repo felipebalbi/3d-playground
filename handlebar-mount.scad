@@ -3,7 +3,7 @@ $fn = $preview ? 25 : 100;
 /*
  * Thickness of material
  *
- * Must be thick as we want to countersink the M3 screws
+ * Must be thick as we want to countersink the M4 screws
  */
 thickness = 8;
 
@@ -25,20 +25,13 @@ extrusion_height = 12;
 /* Tolerance */
 tolerance = 0.2;
 
-/*
- * M3 Screw dimensions
- *
- * Source: https://www.engineersedge.com/hardware/_metric_socket_head_cap_screws_14054.htm
- */
+/* M4 Screw dimensions */
 body_diameter = 3.9 + tolerance;
 head_diameter = 7 + tolerance;
 head_height = 4.1 + tolerance;
 transition_diameter = body_diameter;
 
-/* M3 Nut dimensions
- *
- * Source: https://amesweb.info/Fasteners/Nut/Metric-Hex-Nut-Sizes-Dimensions-Chart.aspx
- */
+/* M4 Nut dimensions */
 nut_height = 4.8 + tolerance;
 nut_diameter = 7.5 + tolerance;
 
@@ -88,10 +81,6 @@ module wing(width, length, height, nut) {
     /* Rounded corner */
     translate([width / 2, length / 3, 0])
       wing_corner_cutout(width, extrusion_height);
-
-    /* M3 Screw Hole */
-    translate([width / 2, 0, height / 2])
-      screw_hole(nut);
   }
 }
 
@@ -115,10 +104,17 @@ module mount(top) {
       mirror([1, 0, 0])
 	translate([wing_position, 0, 0])
 	wing(wingspan, thickness, extrusion_height, nut);
-
       if (top) 
 	top_mount_bracket(handlebar_thickness, extrusion_height, thickness * 2);
     }
+
+    /* M4 Screw Holes */
+    translate([wing_position +  wingspan / 2, 0, extrusion_height / 2])
+      screw_hole(nut);
+
+    mirror([1, 0, 0])
+      translate([wing_position +  wingspan / 2, 0, extrusion_height / 2])
+      screw_hole(nut);
 
     if (top) {
       rotate([90, 0, 0]) {
