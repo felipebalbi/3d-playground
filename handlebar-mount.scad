@@ -30,17 +30,26 @@ tolerance = 0.2;
  *
  * Source: https://www.engineersedge.com/hardware/_metric_socket_head_cap_screws_14054.htm
  */
-body_diameter = 3 + tolerance;
-head_diameter = 5.5 + tolerance;
-head_height = 3 + tolerance;
-transition_diameter = 3.6 + tolerance;
+body_diameter = 3.9 + tolerance;
+head_diameter = 7 + tolerance;
+head_height = 4.1 + tolerance;
+transition_diameter = body_diameter;
 
 /* M3 Nut dimensions
  *
  * Source: https://amesweb.info/Fasteners/Nut/Metric-Hex-Nut-Sizes-Dimensions-Chart.aspx
  */
-nut_height = 2.4 + tolerance;
-nut_diameter = 6 + tolerance;
+nut_height = 4.8 + tolerance;
+nut_diameter = 7.5 + tolerance;
+
+test = false;
+
+radio_clip_thickness = 4;
+radio_clip_radius = 4;
+radio_clip_width = 26;
+radio_clip_catch = 12.4;
+radio_clip_length = extrusion_height + radio_clip_catch + radio_clip_thickness * 2;
+radio_clip_height = test ? 10 : 21.6;
 
 module screw(nut) {
   union() {
@@ -140,35 +149,43 @@ module bottom_mount() {
   mount(false);
 }
 
-module radio_mount(w, l, h, r) {
-  points = [[r, r],
-	    [w - r, r],
-	    [r, l - r],
-	    [w - r , l - r]];
+module radio_mount(w, l, h, r, t) {
+  width = w + 2 * t;
+  length = l + 2 * t;
+
+  echo(str("Dimensions: ", width, "mm X ", length, "mm"));
+  
+  points = [[r		, r],
+	    [width - r	, r],
+	    [r		, length - r],
+	    [width - r	, length - r]];
 
   difference() {
+    /* Body */
     hull() {
       for (p = points) {
 	translate(p) cylinder(h = h, r = r);
       }
     }
 
-    translate([w/2, l/2, -1]) {
-      cylinder(d = extrusion_height + tolerance, h = h * 0.5);
-      cylinder(d = transition_diameter, h = h * 1.5);
-
-      translate([0, 0, h - head_diameter])
-        cylinder(d = head_diameter, h = h/2);
-    }
-
+    /* Radio Clip Cutout */
     hull() {
-      translate([4, 4, -1]) {
-	cylinder(r = 2, h = h * 1.5);
+      translate([t + radio_clip_catch / 2, t +  radio_clip_catch / 2, -1])
+	cylinder(d = radio_clip_catch, h = h + 2);
 
-	translate([0, l - 8, 0])
-	  cylinder(r = 2, h = h * 1.5);
-      }
+      translate([width - t - radio_clip_catch / 2, t + radio_clip_catch / 2, -1])
+	cylinder(d = radio_clip_catch, h = h + 2);
     }
+
+    /* Mounting Hole */
+    translate([width / 2, -1, h / 2])
+      rotate([-90, 0, 0]) {
+      cylinder(d = head_diameter, h = head_height + t + radio_clip_catch + 1);
+      cylinder(d = body_diameter, h = length);
+    }
+
+    translate([width / 2, length / 2 - r - extrusion_height + 3, h / 2 - (extrusion_height + 1) / 2])
+    top_mount_bracket(handlebar_thickness, extrusion_height + 1, thickness * 2);
   }
 }
 
@@ -179,4 +196,5 @@ mirror([0, 1, 0])
 bottom_mount();
 
 translate([handlebar_thickness + thickness, 0, 0])
-radio_mount(handlebar_thickness/2, handlebar_thickness - 5, 70, 2);
+radio_mount(radio_clip_width, radio_clip_length, radio_clip_height,
+	    radio_clip_radius, radio_clip_thickness);
