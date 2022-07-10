@@ -193,29 +193,57 @@ module radio_mount(w, l, h, r, t) {
 	top_mount_bracket(handlebar_thickness, extrusion_height + 0.4, thickness * 2);
 
       /* Insertion relief */
-      translate([t, t+1, h - 2 * t])
+      translate([t, t + 1, h - 2 * t])
 	rotate([30, 0, 0])
 	cube([w, 2 * t, h / 3]);
     }
 
-    translate([t, t + radio_clip_catch, h - 1])
-      cube([radio_clip_width, t, 20]);
+    /* translate([t, t + radio_clip_catch, h - 1]) */
+      /* cube([radio_clip_width, 2, 22]); */
 
-    union() {
-      translate([t, t + 4, h + 20 - 1]) {
-	intersection() {
-	  cube([radio_clip_width, t + 4, t]);
+    /* radio clip top catch */
+    translate([t, t, h - 1]) {
+      difference() {
+	hull() {
+	  cube([radio_clip_width, 10, 2]);
 
-	  translate([0, (t + 4) / 2, 0])
+	  translate([0, 2, h + 2])
 	    rotate([0, 90, 0])
-	    cylinder(h = radio_clip_width, d = t + 4);
-	}
-      }
+	    cylinder(h = radio_clip_width, r = 2);
 
-      translate([t, t + 4 + 0.5, h + 20 - 1])
-	rotate([0, 90, 0])
-	cylinder(h = radio_clip_width, d = 1);
+	  translate([0, 8, h + 2])
+	    rotate([0, 90, 0])
+	    cylinder(h = radio_clip_width, r = 2);
+	}
+
+	translate([-1, -2, -2])
+	hull() {
+	  cube([radio_clip_width + 2, 10, 2]);
+
+	  translate([0, 2, h + 2])
+	    rotate([0, 90, 0])
+	    cylinder(h = radio_clip_width + 2, r = 2);
+
+	  translate([0, 8, h + 2])
+	    rotate([0, 90, 0])
+	    cylinder(h = radio_clip_width + 2, r = 2);
+	}
+	/* translate([-1, -1, -1]) */
+	/*   cube([radio_clip_width + 2, 8, h+1]); */
+      }
     }
+
+    /* union() { */
+    /*   translate([t, t + 2 - 0.5, h + 22 - 1]) { */
+    /* 	intersection() { */
+    /* 	  cube([radio_clip_width, 4 + 5, t]); */
+
+    /* 	  translate([0, (t + 5) / 2, 0]) */
+    /* 	    rotate([0, 90, 0]) */
+    /* 	    cylinder(h = radio_clip_width, d = 4 + 5); */
+    /* 	} */
+    /*   } */
+    /* } */
   }
 }
 
