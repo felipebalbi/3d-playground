@@ -11,6 +11,9 @@ rows			= 10;
 // Number of columns
 columns			= 1;
 
+// Generate Lid?
+lid			= false;
+
 // Cartridge Type
 type			= "NES"; // [ NES, SNES, N64, DS/2DS/3DS, Switch, GameBoy, PSP/UMD, VIC20, C64, Atari 800, Atari 2600, Atari 5200, SD, microSD, Memory Stick Duo ]
 
@@ -119,6 +122,34 @@ module cartridge_case_base(rows, cols, cart) {
   rounded_box(total_width, total_depth, total_height, material_radius);
 }
 
+module cartridge_case_lid(rows, cols, cart) {
+  name		= cartridge_name(cart);
+  width		= cartridge_width(cart);
+  depth		= cartridge_depth(cart);
+  height	= cartridge_height(cart);
+  ratio		= cartridge_ratio(cart);
+
+  total_width	= cols * (width + material_tolerance + 2 * material_thickness)
+    + material_tolerance + 2 * material_thickness;
+
+  total_depth	= rows * (depth + material_tolerance + 2 * material_thickness)
+    + material_tolerance + 2 * material_thickness;
+
+  total_height	= (height * ratio) + material_thickness + material_tolerance;
+
+  echo(str("Generating lid for ", name, " Cartridge Type"));
+
+  difference() {
+    rounded_box(total_width, total_depth, total_height, material_radius);
+
+    translate([material_thickness, material_thickness, -material_thickness])
+      rounded_box(total_width - 2 * material_thickness,
+		  total_depth - 2 * material_thickness,
+		  total_height - material_thickness,
+		  material_radius);
+  }
+}
+
 module cartridge_case(rows, cols, cart) {
   name		= cartridge_name(cart);
   width		= cartridge_width(cart);
@@ -127,11 +158,19 @@ module cartridge_case(rows, cols, cart) {
 
   echo(str("Generating case for ", name, " Cartridge Type"));
 
+  total_width	= cols * (width + material_tolerance + 2 * material_thickness)
+    + material_tolerance + 2 * material_thickness;
+
   difference() {
     cartridge_case_base(rows, columns, cart);
 
     cartridge_array(rows, cols, cart)
       cartridge_slot(cart);
+  }
+
+  if (lid) {
+    translate([total_width, 0, 0])
+      cartridge_case_lid(rows, cols, cart);
   }
 }
 
