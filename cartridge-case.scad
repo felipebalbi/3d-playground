@@ -6,10 +6,10 @@
 
 /* [Parameters] */
 // Number of rows
-rows			= 2;
+rows			= 10;
 
 // Number of columns
-columns			= 2;
+columns			= 1;
 
 // Cartridge Type
 type			= "NES"; // [ NES, SNES, N64, DS/2DS/3DS, Switch, GameBoy, PSP, VIC20, C64, Atari 800, Atari 2600, Atari 5200, SD, microSD, Memory Stick Duo ]
