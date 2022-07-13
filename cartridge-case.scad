@@ -35,7 +35,7 @@ switch_cartridge    = ["Switch",	21.4,	3.4,	31.2,	1/2];
 gb_cartridge        = ["GameBoy",	57,	7.7,	65,	1/3];
 sd_cartridge        = ["SD",		24,	2.2,	32,	3/4];
 microsd_cartridge   = ["microSD",	11,	1,	15,	4/5];
-psp_cartridge	    = ["microSD",	64,	4.2,	65,	3/5];
+psp_cartridge	    = ["PSP",		64,	4.2,	65,	3/5];
 
 function cartridge_name(cart)		= cart[0];
 function cartridge_width(cart)		= cart[1];
