@@ -34,7 +34,7 @@ snes_cartridge	    = ["SNES",		135,	20,	86,	3/5];
 n64_cartridge	    = ["N64",		116,	18,	75,	3/5];
 3ds_cartridge	    = ["DS/2DS/3DS",	32.9,	3.7,	35,	3/5];
 switch_cartridge    = ["Switch",	21.4,	3.4,	31.2,	1/2];
-gb_cartridge        = ["GameBoy",	57,	7.7,	65,	1/3];
+gb_cartridge        = ["GameBoy",	57,	7.7,	65,	2/3];
 
 /* Sony */
 psp_cartridge	    = ["PSP",		64,	4.2,	65,	3/5];
