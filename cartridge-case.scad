@@ -12,7 +12,7 @@ rows			= 10;
 columns			= 1;
 
 // Cartridge Type
-type			= "NES"; // [ NES, SNES, N64, DS/2DS/3DS, Switch, GameBoy, PSP, VIC20, C64, Atari 800, Atari 2600, Atari 5200, SD, microSD, Memory Stick Duo ]
+type			= "NES"; // [ NES, SNES, N64, DS/2DS/3DS, Switch, GameBoy, PSP/UMD, VIC20, C64, Atari 800, Atari 2600, Atari 5200, SD, microSD, Memory Stick Duo ]
 
 /* [Hidden] */
 // Number of faces
@@ -147,7 +147,7 @@ else if (type == "Switch")
   cartridge_case(rows, columns, switch_cartridge);
 else if (type == "GameBoy")
   cartridge_case(rows, columns, gb_cartridge);
-else if (type == "PSP")
+else if (type == "PSP/UMD")
   cartridge_case(rows, columns, psp_cartridge);
 else if (type == "VIC20")
   cartridge_case(rows, columns, vic20_cartridge);
