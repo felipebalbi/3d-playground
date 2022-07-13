@@ -4,21 +4,42 @@
  * Copyright (c) 2022 - Felipe Balbi <felipe@balbi.sh>
  */
 
+/* [Parameters] */
+// Number of rows
+rows = 8;
+
+// AA or AAA?
+is_aa = true;
+
+/* [Hidden] */
+// Number of faces
 $fn = $preview ? 25 : 100;
 
-aa_diameter = 14.2;
-aa_height = 50.4;
-
-aaa_diameter = 10.2;
-aaa_height = 44.4;
-
-ratio = 4/5;
-tolerance = 1.2;
-
-wall_thickness = 2;
-rows = 8;
+// Number of Columns
 cols = 2;
 
+// AA Battery Diameter
+aa_diameter = 14.2;
+
+// AA Battery Height
+aa_height = 50.4;
+
+// AAA Battery Diameter
+aaa_diameter = 10.2;
+
+// AAA Battery Height
+aaa_height = 44.4;
+
+// How much of the battery to cover
+ratio = 4/5;
+
+// Tolerance
+tolerance = 1.2;
+
+// Thickness for the walls
+wall_thickness = 2;
+
+// Radius for the corners
 corner_radius = 2;
 
 module battery_cutout(height, diameter) {
@@ -97,4 +118,4 @@ module body(is_aa = true) {
   }
 }
 
-body(is_aa = true);
+body(is_aa);
