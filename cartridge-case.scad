@@ -62,7 +62,17 @@ function cartridge_depth(cart)		= cart[2];
 function cartridge_height(cart)		= cart[3];
 function cartridge_ratio(cart)		= cart[4];
 
-module rounded_box(width, depth, height, radius) {
+module rounded_cube(dims = [10, 10, 10, 1]) {
+  function get_width(dims)	= dims[0];
+  function get_depth(dims)	= dims[1];
+  function get_height(dims)	= dims[2];
+  function get_radius(dims)	= dims[3];
+
+  width		= get_width(dims);
+  depth		= get_depth(dims);
+  height	= get_height(dims);
+  radius	= get_radius(dims);
+
   points = [[radius, radius],
 	    [width - radius, radius],
 	    [radius, depth - radius],
@@ -103,7 +113,7 @@ module cartridge_slot(cart) {
   total_depth	= depth + 2 * material_tolerance;
   total_height	= height;
 
-  rounded_box(total_width, total_depth, total_height, material_radius);
+  rounded_cube([total_width, total_depth, total_height, material_radius]);
 }
 
 module cartridge_case_base(rows, cols, cart) {
@@ -119,7 +129,7 @@ module cartridge_case_base(rows, cols, cart) {
   echo(str("Total Dimensions: ", total_width, " mm ✕ ", total_depth, " mm ✕ ",
 	   total_height, " mm."));
 
-  rounded_box(total_width, total_depth, total_height, material_radius);
+  rounded_cube([total_width, total_depth, total_height, material_radius]);
 }
 
 module cartridge_case_lid(rows, cols, cart) {
@@ -140,13 +150,13 @@ module cartridge_case_lid(rows, cols, cart) {
   echo(str("Generating lid for ", name, " Cartridge Type"));
 
   difference() {
-    rounded_box(total_width, total_depth, total_height, material_radius);
+    rounded_cube([total_width, total_depth, total_height, material_radius]);
 
     translate([material_thickness, material_thickness, -material_thickness])
-      rounded_box(total_width - 2 * material_thickness,
-		  total_depth - 2 * material_thickness,
-		  total_height - material_thickness,
-		  material_radius);
+      rounded_cube([total_width - 2 * material_thickness,
+		    total_depth - 2 * material_thickness,
+		    total_height - material_thickness,
+		    material_radius]);
   }
 }
 
