@@ -85,20 +85,27 @@ module rounded_cube(dims = [10, 10, 10, 1]) {
   }
 }
 
-module cartridge_array(rows, cols, cart) {
-  width		= cartridge_width(cart);
-  depth		= cartridge_depth(cart);
-  height	= cartridge_height(cart);
+module make_array(dims) {
+  function get_rows(dims)	= dims[0];
+  function get_cols(dims)	= dims[1];
+  function get_width(dims)	= dims[2];
+  function get_depth(dims)	= dims[3];
+  function get_thickness(dims)	= dims[4];
+  function get_tolerance(dims)	= dims[5];
+
+  rows		= get_rows(dims);
+  cols		= get_cols(dims);
+  width		= get_width(dims);
+  depth		= get_depth(dims);
+  thickness	= get_thickness(dims);
+  tolerance	= get_tolerance(dims);
 
   for (i = [0:1:cols - 1]) {
     for (j = [0:1:rows - 1]) {
-      x = (2 * material_thickness + width + material_tolerance) * i +
-	material_thickness;
+      x = (2 * thickness + width + tolerance) * i + thickness;
+      y = (2 * thickness + depth + tolerance) * j + thickness;
 
-      y = (2 * material_thickness + depth + material_tolerance) * j +
-	material_thickness;
-
-      translate([x, y, material_thickness])
+      translate([x, y, thickness])
 	children();
     }
   }
@@ -174,7 +181,7 @@ module cartridge_case(rows, cols, cart) {
   difference() {
     cartridge_case_base(rows, columns, cart);
 
-    cartridge_array(rows, cols, cart)
+    make_array([rows, cols, width, depth, material_thickness, material_tolerance])
       cartridge_slot(cart);
   }
 
