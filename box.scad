@@ -66,8 +66,8 @@ module box_walls(width, depth, height, thickness, radius) {
 }
 
 module box_lip(width, depth, thickness, radius, lip) {
-  total_width = width + lip - radius;
-  total_depth = depth + lip - radius;
+  total_width = width + 2 * lip - radius;
+  total_depth = depth + 2 * lip - radius;
 
   linear_extrude(2 * thickness + lip)
     rounded_square([total_width, total_depth], r = radius);
@@ -105,7 +105,7 @@ module lid(width, depth, height, thickness, radius,
     box_body(width, depth, height, thickness, radius);
     
     translate([0, 0, height])
-      box_walls(width + lip - slack, depth + lip - slack, height + lip,
+      box_walls(width + 2 * lip - slack, depth + 2 * lip - slack, height + lip,
 		thickness, radius);
   }
 }
