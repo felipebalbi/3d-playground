@@ -16,13 +16,12 @@ lip_slack = 0.2;
 
 /* [Parameters] */
 // Total Box Width (mm)
-box_width = 22;
+box_width = 10;
 
 // Total Box Depth (mm)
-box_depth = 13;
-
+box_depth = 10;
 // Total Box Height (mm)
-box_height = 71;
+box_height = 10;
 
 // Wall Thickness (mm)
 wall_thickness = 2;
