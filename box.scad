@@ -18,8 +18,8 @@ lip_slack = 0.2;
 // Total Box Width (mm)
 box_width = 22;
 
-// Total Box Length (mm)
-box_length = 13;
+// Total Box Depth (mm)
+box_depth = 13;
 
 // Total Box Height (mm)
 box_height = 71;
@@ -33,11 +33,17 @@ wall_radius = 1;
 // Box vs Lid Ratio
 ratio = 4/5;
 
-module rounded_square(w, l, r) {
-  points = [[-w/2	, -l/2],
-	    [-w/2	, l/2],
-	    [w/2	, -l/2],
-	    [w/2	, l/2]];
+module rounded_square(dims, r = 1) {
+  function get_width(dims)	= dims[0];
+  function get_depth(dims)	= dims[1];
+
+  w = get_width(dims);
+  d = get_depth(dims);
+
+  points = [[-w/2	, -d/2],
+	    [-w/2	,  d/2],
+	    [ w/2	, -d/2],
+	    [ w/2	,  d/2]];
 
   hull() {
     for (p = points)
@@ -45,68 +51,68 @@ module rounded_square(w, l, r) {
   }
 }
 
-module box_walls(width, length, height, thickness, radius) {
+module box_walls(width, depth, height, thickness, radius) {
   outter_width	= width + 2 * thickness - radius;
-  outter_length = length + 2 * thickness - radius;
+  outter_depth = depth + 2 * thickness - radius;
 
   inner_width	= width - radius;
-  inner_length	= length - radius;
+  inner_depth	= depth - radius;
 
   linear_extrude(height)
   difference() {
-    rounded_square(outter_width, outter_length, radius);
-    rounded_square(inner_width, inner_length, radius);
+    rounded_square([outter_width, outter_depth], r = radius);
+    rounded_square([inner_width, inner_depth], r = radius);
   }
 }
 
-module box_lip(width, length, thickness, radius, lip) {
+module box_lip(width, depth, thickness, radius, lip) {
   total_width = width + lip - radius;
-  total_length = length + lip - radius;
+  total_depth = depth + lip - radius;
 
   linear_extrude(2 * thickness + lip)
-    rounded_square(total_width, total_length, radius);
+    rounded_square([total_width, total_depth], r = radius);
 }
 
-module box_floor(width, length, thickness, radius) {
+module box_floor(width, depth, thickness, radius) {
   total_width = width + 2 * thickness - radius;
-  total_length = length + 2 * thickness - radius;
+  total_depth = depth + 2 * thickness - radius;
 
   linear_extrude(thickness)
-    rounded_square(total_width, total_length, radius);
+    rounded_square([total_width, total_depth], r = radius);
 }
 
-module box_body(width, length, height, thickness, radius) {
+module box_body(width, depth, height, thickness, radius) {
   union() {
-   %box_floor(width, length, thickness, radius);
+   box_floor(width, depth, thickness, radius);
 
     translate([0, 0, thickness])
-      box_walls(width, length, height, thickness, radius);
+      box_walls(width, depth, height, thickness, radius);
   }
 }
 
-module box(width, length, height, thickness, radius, lip = lip_thickness) {
+module box(width, depth, height, thickness, radius, lip = lip_thickness) {
   difference() {
-    box_body(width, length, height, thickness, radius);
+    box_body(width, depth, height, thickness, radius);
 
     translate([0, 0, height - lip/2])
-      box_lip(width, length, thickness, radius, lip);
+      box_lip(width, depth, thickness, radius, lip);
   }
 }
 
-module lid(width, length, height, thickness, radius,
+module lid(width, depth, height, thickness, radius,
 	   lip = lip_thickness, slack = lip_slack) {
   difference() {
-    box_body(width, length, height, thickness, radius);
+    box_body(width, depth, height, thickness, radius);
     
     translate([0, 0, height])
-      box_walls(width + lip - slack, length + lip - slack, height + lip,
+      box_walls(width + lip - slack, depth + lip - slack, height + lip,
 		thickness, radius);
   }
 }
 
-box(box_width, box_length, box_height * ratio,
+box(box_width, box_depth, box_height * ratio,
     wall_thickness, wall_radius);
 
 translate([box_width + 2 * wall_thickness + 2 * wall_radius + 2, 0, 0])
-lid(box_width, box_length, box_height * (1 - ratio) + wall_thickness,
+lid(box_width, box_depth, box_height * (1 - ratio) + wall_thickness,
     wall_thickness, wall_radius);
