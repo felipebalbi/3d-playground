@@ -9,10 +9,10 @@
 $fn = 100;
 
 // Box & Lid lip
-lip_thickness = 2;
+lip_thickness = 1;
 
 // Box & Lip slack
-lip_slack = 0.25;
+lip_slack = 0.2;
 
 /* [Parameters] */
 // Total Box Width (mm)
@@ -25,7 +25,7 @@ box_length = 13;
 box_height = 71;
 
 // Wall Thickness (mm)
-wall_thickness = 2.5;
+wall_thickness = 2;
 
 // Wall radius (mm)
 wall_radius = 1;
