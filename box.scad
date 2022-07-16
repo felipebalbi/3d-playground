@@ -33,42 +33,51 @@ wall_radius = 1;
 // Box vs Lid Ratio
 ratio = 4/5;
 
+module rounded_square(w, l, r) {
+  points = [[-w/2	, -l/2],
+	    [-w/2	, l/2],
+	    [w/2	, -l/2],
+	    [w/2	, l/2]];
+
+  hull() {
+    for (p = points)
+      translate(p) circle(r);
+  }
+}
+
 module box_walls(width, length, height, thickness, radius) {
+  outter_width	= width + 2 * thickness - radius;
+  outter_length = length + 2 * thickness - radius;
+
+  inner_width	= width - radius;
+  inner_length	= length - radius;
+
   linear_extrude(height)
   difference() {
-    minkowski() {
-      total_width = width + 2 * thickness - radius;
-      total_length = length + 2 * thickness - radius;
-      square([total_width, total_length], center = true);
-      circle(radius);
-    }
-
-    minkowski() {
-      square([width - radius, length - radius], center = true);
-      circle(radius);
-    }
+    rounded_square(outter_width, outter_length, radius);
+    rounded_square(inner_width, inner_length, radius);
   }
 }
 
 module box_lip(width, length, thickness, radius, lip) {
+  total_width = width + lip - radius;
+  total_length = length + lip - radius;
+
   linear_extrude(2 * thickness + lip)
-    minkowski() {
-    square([width + lip - radius, length + lip - radius], center = true);
-    circle(radius);
-  }
+    rounded_square(total_width, total_length, radius);
 }
 
 module box_floor(width, length, thickness, radius) {
+  total_width = width + 2 * thickness - radius;
+  total_length = length + 2 * thickness - radius;
+
   linear_extrude(thickness)
-    minkowski() {
-    square([width + 2 * thickness - radius, length + 2 * thickness - radius], center = true);
-    circle(radius);
-  }
+    rounded_square(total_width, total_length, radius);
 }
 
 module box_body(width, length, height, thickness, radius) {
   union() {
-    box_floor(width, length, thickness, radius);
+   %box_floor(width, length, thickness, radius);
 
     translate([0, 0, thickness])
       box_walls(width, length, height, thickness, radius);
