@@ -39,10 +39,10 @@ module rounded_square(dims, r = 1) {
   w = get_width(dims);
   d = get_depth(dims);
 
-  points = [[-w/2	, -d/2],
-	    [-w/2	,  d/2],
-	    [ w/2	, -d/2],
-	    [ w/2	,  d/2]];
+  points = [[-w / 2 + r, -d / 2 + r],
+	    [-w / 2 + r,  d / 2 - r],
+	    [ w / 2 - r, -d / 2 + r],
+	    [ w / 2 - r,  d / 2 - r]];
 
   hull() {
     for (p = points) {
@@ -54,11 +54,11 @@ module rounded_square(dims, r = 1) {
 }
 
 module box_walls(width, depth, height, thickness, radius) {
-  outter_width	= width + 2 * thickness - radius;
-  outter_depth = depth + 2 * thickness - radius;
+  outter_width	= width + 2 * thickness;
+  outter_depth = depth + 2 * thickness;
 
-  inner_width	= width - radius;
-  inner_depth	= depth - radius;
+  inner_width	= width;
+  inner_depth	= depth;
 
   linear_extrude(height) {
     difference() {
@@ -69,8 +69,8 @@ module box_walls(width, depth, height, thickness, radius) {
 }
 
 module box_lip(width, depth, thickness, radius, lip) {
-  total_width = width + 2 * lip - radius;
-  total_depth = depth + 2 * lip - radius;
+  total_width = width + 2 * lip;
+  total_depth = depth + 2 * lip;
 
   linear_extrude(2 * thickness + lip) {
     rounded_square([total_width, total_depth], r = radius);
@@ -78,8 +78,8 @@ module box_lip(width, depth, thickness, radius, lip) {
 }
 
 module box_floor(width, depth, thickness, radius) {
-  total_width = width + 2 * thickness - radius;
-  total_depth = depth + 2 * thickness - radius;
+  total_width = width + 2 * thickness;
+  total_depth = depth + 2 * thickness;
 
   linear_extrude(thickness) {
     rounded_square([total_width, total_depth], r = radius);
