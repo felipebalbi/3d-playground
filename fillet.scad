@@ -1,34 +1,41 @@
-$fn = 60;
+$fn = 100;
 
-module fillet(height, radius) {
-  cylinder(h = height, r = radius);
-
-  rotate_extrude()
-  translate([radius * 3, radius * 2, 0])
-    rotate([0, 0, 180])
-    difference() {
-      square(radius * 2);
-      circle(radius * 2);
-  }
-}
-
-module top(height, radius) {
+module fillet(radius) {
   difference() {
-      sphere(r = height);
-      translate([0, 0, -height])
-      cube(height * 2, center = true);
+    square(radius);
+
+    translate([radius, radius, 0])
+      circle(r = radius);
   }
 }
 
-module knob(height, radius) {
-  fillet(height, radius);
-
-  translate([0, 0, height])
-    top(height, radius);
-
-  translate([0, 0, height])
-  rotate([180, 0, 0])
-    fillet(height, radius);
+module circular_fillet(rod_radius, radius) {
+  rotate_extrude(angle = 360)
+  translate([rod_radius, 0, 0])
+    fillet(radius);
 }
 
-knob(10, 3);
+module linear_fillet(width, radius) {
+  rotate([90, 0, 0])
+    linear_extrude(height = width, center = true)
+    fillet(radius);
+}
+
+module rectangular_fillet(width, length, radius) {
+  module rectangular_half(width, length, radius) {
+    translate([0, width / 2, 0])
+      linear_fillet(width, radius);
+
+    translate([length / 2, 0, 0])
+      rotate([0, 0, 90])
+      linear_fillet(length, radius);
+  }
+
+  rectangular_half(width, length, radius);
+
+  translate([length, width, 0])
+  rotate([0, 0, 180])
+    rectangular_half(width, length, radius);
+}
+
+rectangular_fillet(5, 10, 1);
