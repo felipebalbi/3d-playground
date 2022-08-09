@@ -1,107 +1,122 @@
-module box_sleeve(width, depth, height, thickness, radius) {
-  translate([radius, radius, 0]) {
-    difference() {
-      hull() {
-	for (p = [[0, 0, 0],
-		  [width + thickness / 2, 0, 0],
-		  [0, depth + thickness / 2, 0],
-		  [width + thickness / 2, depth + thickness / 2, 0]]) {
-	  translate(p) {
-	    cylinder(h = height, r = radius, $fn=60);
-	  }
-	}
-      }
+use <box.scad>;
+use <fillet.scad>;
 
-      hull() {
-	for (p = [[thickness/2, thickness/2, -10],
-		  [width, thickness/2, -10],
-		  [thickness/2, depth, -10],
-		  [width, depth, -10]]) {
-	  translate(p) {
-	    cylinder(h = height * 1.5, r = radius, $fn=60);
-	  }
-	}
-      }
+$fn = 100;
 
-      translate([3 * width / 4, depth / 4, -10]) {
-        cube([width / 2, depth / 2, height * 1.5]);
-      }
+holder_size = 63;
+capsule_height = 35;
+holder_height = 150;
 
-      translate([3 * width / 4, thickness / 2, -1]) {
-	minkowski() {
-          cube([width - thickness / 2, depth - thickness/2, height / 3]);
-	  sphere(thickness / 2, $fn = 60);
-        }
-      }
-    }
-  }
-}
+material_thickness = 2.5;
+corner_radius = 3;
 
-module shelf(width, depth, height) {
-  translate([height, height, 0])
-  hull() {
-    for (p = [[0, 0, 0],
-	      [width + height / 2, 0, 0],
-	      [0, depth + height / 2, 0],
-	      [width + height / 2, depth + height / 2, 0]]) {
-      translate(p) {
-	cylinder(h = height, r = height, $fn=60);
-      }
-    }
-  }
+module holder_ramp(dims, r = 1) {
+  function get_width(dims)	= dims[0];
+  function get_depth(dims)	= dims[1];
 
-  translate([width + height * 1.5, height, 15 + height])
-  rotate([0, 90, 0])
-  hull() {
-    for (p = [[0, 0, 0],
-	      [15, 0, 0],
-	      [0, depth + height / 2, 0],
-	      [15, depth + height / 2, 0]]) {
-      translate(p) {
-	cylinder(h = height, r = height, $fn=60);
-      }
-    }
-  }
+  width = get_width(dims);
+  depth = get_depth(dims);
+  height = depth;
 
-  translate([width + height * 1.5, height * 1.5, 7.5]) {
-    rotate(a = [-270, 0, 90])
-    linear_extrude(4)
-    text("#2", size=6);
-  }
-}
-
-module lip(box_depth, box_height) {
-  translate([3, box_depth / 2, box_height / 2])
-  rotate([-90, 0, 0])
-  cylinder(h = 10, r = 2, $fn = 60);
-}
-
-module ramp(width, depth, height, thickness, radius) {
   difference() {
-    translate([radius, radius, 0]) {
-      hull() {
-	for (p = [[thickness/2, thickness/2, 0],
-		  [width, thickness/2, 0],
-		  [thickness/2, depth, 0],
-		  [width, depth, 0]]) {
-	  translate(p) {
-	    cylinder(h = height, r = radius, $fn=60);
-	  }
-	}
-      }
+    linear_extrude(2 * height / 3) {
+      rounded_square([width, depth, height], r);
     }
 
-    translate([height*1.75, 0, height*2])
-      rotate([-90, 0, 0])
-      cylinder(h = width + thickness*3, r = height*2, $fn = 100);
+    translate([0, material_thickness - depth / 2, height])
+      rotate([0, 90, 0])
+      cylinder(r = depth, h = height, center = true);
   }
 }
 
-module coffee_holder() {
-  box_sleeve(60, 60, 150, 5, 3);
-  shelf(120, 60, 3.3);
-  lip(60, 90);
-  ramp(60, 60, 30, 3, 3);
+module holder_walls(dims, r = 1) {
+  function get_width(dims)	= dims[0];
+  function get_depth(dims)	= dims[1];
+  function get_height(dims)	= dims[2];
+
+  width = get_width(dims);
+  depth = get_depth(dims);
+  height = get_height(dims);
+
+  strain_relief = width / 3;
+
+  difference() {
+    linear_extrude(height - capsule_height)
+      difference() {
+      rounded_square([width + material_thickness * 2,
+		      depth + material_thickness * 2], r);
+
+      rounded_square(dims, r);
+
+      translate([0, -depth/2])
+	rounded_square([strain_relief, depth/2], r);
+    }
+
+    translate([0, -depth/2, 0])
+    rotate([90, 45, 0])
+      cube([width * cos(45),
+	    width * sin(45),
+	    material_thickness * 2 + 2], center=true);
+
+    translate([strain_relief/2 - 0.1, -depth/2, height - capsule_height + 0.1])
+      rotate([0, 90, 0]) {
+      linear_fillet(material_thickness * 2 + 2, corner_radius);
+    }
+
+    mirror([1, 0, 0])
+    translate([strain_relief/2 - 0.1, -depth/2, height - capsule_height + 0.1])
+    rotate([0, 90, 0])
+      linear_fillet(material_thickness * 2 + 2, corner_radius);
+  }
 }
 
-coffee_holder();
+module holder_shelf(dims, r = 1) {
+  function get_width(dims)	= dims[0];
+  function get_depth(dims)	= dims[1];
+
+  linear_extrude(capsule_height)
+  difference() {
+    width = get_width(dims);
+    depth = get_depth(dims) * 2;
+
+    rounded_square([width + material_thickness * 2,
+		    depth + material_thickness * 2], r);
+
+    rounded_square([width, depth], r);
+  }
+}
+
+module holder_floor(dims, r = 1) {
+  function get_width(dims)	= dims[0];
+  function get_depth(dims)	= dims[1];
+  function get_height(dims)	= dims[2];
+
+  linear_extrude(material_thickness)
+  difference() {
+    width = get_width(dims);
+    depth = get_depth(dims) * 2;
+
+    rounded_square([width + material_thickness * 2,
+		    depth + material_thickness * 2], r);
+  }
+}
+
+module holder(dims, r) {
+  function get_width(dims)	= dims[0];
+  function get_depth(dims)	= dims[1];
+  function get_height(dims)	= dims[2];
+
+  union() {
+    translate([0, -get_depth(dims)/2, 0]) {
+      holder_shelf(dims, r);
+      holder_floor(dims, r);
+    }
+
+    holder_ramp(dims, r);
+
+    translate([0, 0, capsule_height])
+      holder_walls(dims, r);
+  }
+}
+
+holder([holder_size, holder_size, holder_height], r = corner_radius);
