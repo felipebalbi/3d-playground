@@ -3,7 +3,8 @@ use <fillet.scad>;
 
 $fn = 100;
 
-holder_size = 63;
+holder_width = 63;
+holder_depth = 63;
 capsule_height = 35;
 holder_height = 150;
 
@@ -16,14 +17,14 @@ module holder_ramp(dims, r = 1) {
 
   width = get_width(dims);
   depth = get_depth(dims);
-  height = depth;
+  height = width;
 
   difference() {
-    linear_extrude(2 * height / 3) {
+    linear_extrude(depth) {
       rounded_square([width, depth, height], r);
     }
 
-    translate([0, material_thickness - depth / 2, height])
+    translate([0, material_thickness - depth / 2, depth])
       rotate([0, 90, 0])
       cylinder(r = depth, h = height, center = true);
   }
@@ -119,4 +120,4 @@ module holder(dims, r) {
   }
 }
 
-holder([holder_size, holder_size, holder_height], r = corner_radius);
+holder([holder_width, holder_depth, holder_height], r = corner_radius);
