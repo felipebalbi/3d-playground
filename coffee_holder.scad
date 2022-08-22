@@ -15,19 +15,18 @@ module holder_ramp(dims, r = 1) {
   function get_width(dims)	= dims[0];
   function get_depth(dims)	= dims[1];
 
-  width = get_width(dims);
-  depth = get_depth(dims);
+  width = get_width(dims) + material_thickness / 2;
+  depth = get_depth(dims) + material_thickness / 2;
   height = width;
 
-  difference() {
-    linear_extrude(depth) {
-      rounded_square([width, depth, height], r);
-    }
+  points = [[0,		0],
+	    [depth,	0],
+	    [0,		depth]];
 
-    translate([0, material_thickness - depth / 2, depth])
-      rotate([0, 90, 0])
-      cylinder(r = depth, h = height, center = true);
-  }
+  translate([width/2, depth/2, 0])
+    rotate([90, 0, -90])
+    linear_extrude(width)
+    polygon(points);
 }
 
 module holder_walls(dims, r = 1) {
