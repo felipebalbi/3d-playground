@@ -1,3 +1,5 @@
+$fn = 50;
+
 body_width = 35;
 body_length = 25;
 body_height = 150;
@@ -5,6 +7,8 @@ body_height = 150;
 cutout_width = 35;
 cutout_length = 13;
 cutout_height = 70;
+
+corner_radius = 2;
 
 module bump(w) {
   rotate([0, 90, 0])
@@ -16,7 +20,17 @@ module cutout(w, l, h) {
 }
 
 module body(w, l, h) {
-  cube([w, l, h]);
+  points = [[0, 0],
+	    [w - 2 * corner_radius, 0],
+	    [0, l - 2 * corner_radius],
+	    [w - 2 * corner_radius, l - 2 * corner_radius]];
+
+  translate([corner_radius, corner_radius, 0])
+  hull() {
+    for (p = points) {
+      translate (p) cylinder(h=h, r = corner_radius);
+    }
+  }
 }
 
 module tool(bw, bl, bh, cw, cl, ch) {
@@ -28,11 +42,11 @@ module tool(bw, bl, bh, cw, cl, ch) {
 	cutout(cw + 2, cl, ch + 2);
     }
 
-    translate([0, 0, bh - 50])
-      bump(bw);
+    translate([corner_radius, 0, bh - 50])
+      bump(bw - 2 * corner_radius);
 
-    translate([0, bl, bh - 50])
-      bump(bw);
+    translate([corner_radius, bl, bh - 50])
+      bump(bw - 2 * corner_radius);
   }
 }
 
