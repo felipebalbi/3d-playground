@@ -48,7 +48,7 @@ c64_cartridge	    = ["C64",		68.5,	20.1,	88.9,	3/5];
 
 /* Atari */
 atari800_cartridge  = ["Atari 800",	66,	22,	77,	3/5];
-atari2600_cartridge = ["Atari 2600",	81,	19,	87,	3/5];
+atari2600_cartridge = ["Atari 2600",	83,	22,	99,	3/5];
 atari5200_cartridge = ["Atari 5200",	104,	17,	112,	3/5];
 
 /* Memory Cards */
